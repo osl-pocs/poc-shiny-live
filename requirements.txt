@@ -1,0 +1,5 @@
+shiny>=1
+shinylive>=0.8
+plotly>=6
+pandas>=2,<3
+ruff            # linter used in CI (optional)

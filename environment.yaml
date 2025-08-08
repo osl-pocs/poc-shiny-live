@@ -1,0 +1,9 @@
+name: poc-shiny-live
+channels:
+  - nodefaults
+  - conda-forge
+dependencies:
+  - python <3.13
+  - pip
+  - pip:
+    - -r requirements.txt
