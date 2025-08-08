@@ -4,12 +4,17 @@ on:
   push:
     branches: [main]
 
+permissions:              # top-level = applies to all jobs
+  contents: read
+  pages: write             # allow publish
+  id-token: write          # OIDC for Pages
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
+    environment:           # ✅ REQUIRED
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
 
     steps:
       - uses: actions/checkout@v4
@@ -20,16 +25,16 @@ jobs:
 
       - name: Install deps
         run: |
-          pip install -r requirements-dev.txt
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt       # dev tools (ruff)
 
       - name: Export with Shinylive
-        run: |
-          shinylive export . ./site
+        run: shinylive export . site
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./site
+          path: site
 
       - name: Deploy to GitHub Pages
         id: deploy
