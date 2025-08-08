@@ -15,7 +15,9 @@ from pathlib import Path
 
 import pandas as pd
 import plotly.express as px
-from shiny import App, Inputs, Outputs, Session, reactive, render, ui
+from shiny import App, Inputs, Outputs, Session, reactive, ui
+from shinywidgets import render_widget, output_widget   # NEW
+
 
 # --------------------------------------------------------------------------- #
 # Data
@@ -43,7 +45,7 @@ page: ui.Page = ui.page_fluid(
         step=5,
         animate=True,
     ),
-    ui.output_plot("scatter"),
+    output_widget("scatter"),
     ui.hr(),
     ui.markdown(
         "Source: [Gapminder](https://www.gapminder.org/data/) | Built with "
@@ -64,7 +66,7 @@ def server(input: Inputs, output: Outputs, session: Session) -> None:
         return GAPMINDER[GAPMINDER["year"] == input.year()]
 
     @output
-    @render.plot
+    @render_widget
     def scatter():
         """Render an interactive scatter plot."""
         df: pd.DataFrame = _filtered()
